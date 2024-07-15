@@ -1,0 +1,26 @@
+{
+  "subNameContractAddress": "",
+  "issuerContractAddress": "",
+  "feeContractAddress": "",
+  "configContractAddress": "",
+  "configSingletonName": "Ergonames Config Singleton",
+  "configSingletonDescription": "Ergonames Config Singleton",
+  "sigUsdOracleSingletonTokenId": "e0309d2d2948098814b8635a2ba4c8d98918a60bb81b10a81c13e97b9d323ec2",
+  "minCommitBoxAge": 1,
+  "maxCommitBoxAge": 300,
+  "singletonName": "Ergonames Registry Singleton",
+  "singletonDescription": "Ergonames Registry Singleton",
+  "collectionInfo": {
+    "collectionName": "Ergonames",
+    "collectionDescription": "",
+    "collectionLogoURL": "https://gateway.ipfs://QmbPirizL3FkyVd26j4tkLfWJGhweswpPBLHjAia7GQfx9",
+    "collectionFeaturedImageURL": "https://ipfs.io/ipfs/QmWr3LxbCfiPnKk6TZEQjrTihnUTtBGYZsRQJyCCm523PY/city.png",
+    "collectionBannerImageURL": "https://gateway.ipfs.io/ipfs/bafybeifuvsgvfxtvc5iboekzet7gu5uk2npj3hrpyzcok73z3abl7x5rs4/pixel_banner.png",
+    "collectionCategory": "Utility"
+  },
+  "socialMedia": {
+    "twitter": "https://x.com/ergonames"
+  },
+  "royalty": [],
+  "mintingExpiry": -1
+}

@@ -1,0 +1,34 @@
+logs
+/null
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+logfile
+*.log
+.DS_Store
+.g8
+/app/mint/Playground.scala
+
+# targets
+**/target
+
+# env
+.env
+config.env
+
+# metals
+project/.bloop
+project/project
+project/target
+project/metals.sbt
+target
+.metals
+.bloop
+
+.vscode
+*.json
+ergonames-*.jar
+.idea
+.bsp

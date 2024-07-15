@@ -1,0 +1,10 @@
+{
+  "txOperatorMnemonic": ",
+  "txOperatorMnemonicPw": "",
+  "txOperatorFee": 1000000,
+  "minerFeeNanoERG": 1000000,
+  "minBoxValue": 1000000,
+  "nodeUrl": "http://213.239.193.208:9052",
+  "apiUrl": "https://api-testnet.ergoplatform.com",
+  "explorerBaseURI": "https://explorer.ergoplatform.com/en/transactions/"
+}
