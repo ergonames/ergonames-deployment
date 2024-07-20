@@ -146,7 +146,7 @@ object Main extends App {
       val ergForFees = Config.minerFeeNanoERG * box.getTokens.size()
       val boxErgValue = if (boxValue == 0) box.getValue else boxValue
       var totalErgCost =
-        boxErgValue + ergForMinting + ergForFees + Config.minerFeeNanoERG
+        boxErgValue + ergForMinting + ergForFees + Config.minerFeeNanoERG + Config.minBoxValue
 
       val inputValueRequired = totalErgCost + Config.minerFeeNanoERG
 
@@ -164,6 +164,8 @@ object Main extends App {
       inputboxes.append(
         inputs.items.map(boxAPIObj.convertJsonBoxToInputBox): _*
       )
+
+      var cometTokenId = ""
 
       val signedTxHolder
           : mutable.ListBuffer[org.ergoplatform.appkit.SignedTransaction] =
@@ -185,11 +187,18 @@ object Main extends App {
             description =
               if (tokenMetadata.getDescription == null) token.getId.toString()
               else tokenMetadata.getDescription,
-            tokenAmount = token.getValue,
+            tokenAmount =
+              if (tokenMetadata.getName == "COMET") token.getValue * 2
+              else token.getValue,
             tokenDecimals =
               if (tokenMetadata.getDecimals == null) 0
               else tokenMetadata.getDecimals
           )
+
+          if (tokenMetadata.getName == "COMET") {
+            println("Comet found")
+            cometTokenId = inputboxes.head.getId.toString()
+          }
 
           signedTxHolder.append(signedTx)
         } else {
@@ -206,11 +215,20 @@ object Main extends App {
             description =
               if (tokenMetadata.getDescription == null) token.getId.toString()
               else tokenMetadata.getDescription,
-            tokenAmount = token.getValue,
+            tokenAmount =
+              if (tokenMetadata.getName == "COMET") token.getValue * 2
+              else token.getValue,
             tokenDecimals =
               if (tokenMetadata.getDecimals == null) 0
               else tokenMetadata.getDecimals
           )
+
+          if (tokenMetadata.getName == "COMET") {
+            println("Comet found")
+            cometTokenId =
+              signedTxHolder.head.getOutputsToSpend.get(0).getId.toString()
+          }
+
           signedTxHolder.clear()
           signedTxHolder.append(signedTx)
         }
@@ -221,16 +239,43 @@ object Main extends App {
 
       })
 
+      val tokenBox = outBoxObj.simpleTokenBox(
+        Seq(
+          new ErgoToken(
+            cometTokenId,
+            (signedTxHolder.head.getOutputsToSpend
+              .get(0)
+              .getTokens
+              .asScala
+              .find((t) => t.getId.toString() == cometTokenId)
+              .get
+              .getValue) / 2
+          )
+        ),
+        txHelper.senderAddress,
+        Config.minBoxValue
+      )
+
       val clonedBox = outBoxObj.boxCloner(
         box,
-        signedTxHolder.head.getOutputsToSpend.get(0).getTokens.asScala,
+        signedTxHolder.head.getOutputsToSpend
+          .get(0)
+          .getTokens
+          .asScala
+          .map(t => {
+            if (t.getId.toString() == cometTokenId) {
+              ErgoToken(t.getId, t.getValue / 2)
+            } else {
+              t
+            }
+          }),
         boxErgValue
       )
 
       val unSignedTx =
         txHelper.buildUnsignedTransaction(
           Seq(signedTxHolder.head.getOutputsToSpend.get(0)),
-          Seq(clonedBox)
+          Seq(clonedBox, tokenBox)
         )
 
       val signedTx = txHelper.signTransaction(

@@ -238,4 +238,22 @@ class OutBoxes(ctx: BlockchainContext) {
       .build()
   }
 
+  def simpleTokenBox(
+      tokens: Seq[ErgoToken],
+      receiver: Address,
+      amount: Long = minAmount
+  ): OutBox = {
+    this.txBuilder
+      .outBoxBuilder()
+      .value(amount)
+      .tokens(tokens: _*)
+      .contract(
+        new ErgoTreeContract(
+          receiver.getErgoAddress.script,
+          this.ctx.getNetworkType
+        )
+      )
+      .build()
+  }
+
 }
